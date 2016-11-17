@@ -2,6 +2,7 @@
 
 const express = require('express');
 const morgan = require('morgan');
+const {emailError} = require('./emailError')
 
 const {logger} = require('./utilities/logger');
 // these are custom errors we've created
@@ -26,6 +27,10 @@ app.get('*', russianRoulette);
 // YOUR MIDDLEWARE FUNCTION should be activated here using
 // `app.use()`. It needs to come BEFORE the `app.use` call
 // below, which sends a 500 and error message to the client
+
+app.use((err, req, res, next) => {
+  emailError(err, req, res, next);
+});
 
 app.use((err, req, res, next) => {
   logger.error(err);
